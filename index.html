@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Before After Slider</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .slider-container {
+      position: relative;
+      width: 100vw;       /* Full screen width */
+      height: 100vh;      /* Full screen height */
+      overflow: hidden;
+      cursor: ew-resize;
+    }
+
+    .slider-container img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .after-image {
+      clip-path: inset(0 50% 0 0); /* Start halfway revealed */
+    }
+
+    .slider-handle {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 4px;
+      height: 100%;
+      background: #fff;
+      z-index: 10;
+      cursor: ew-resize;
+    }
+
+    @media (max-width: 768px) {
+      .slider-container {
+        height: 70vh; /* Optional adjustment for mobile */
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="slider-container" id="slider">
+  <img src="img/future-1.jpg" class="before-image" alt="Before">
+<img src="img/future-2.jpg" class="after-image" id="afterImage" alt="After">
+  <div class="slider-handle" id="handle"></div>
+</div>
+
+<script>
+  const slider = document.getElementById('slider');
+  const afterImage = document.getElementById('afterImage');
+  const handle = document.getElementById('handle');
+
+  slider.addEventListener('mousedown', startSlide);
+  document.addEventListener('mouseup', stopSlide);
+
+  function startSlide(e) {
+    document.addEventListener('mousemove', slide);
+  }
+
+  function stopSlide(e) {
+    document.removeEventListener('mousemove', slide);
+  }
+
+  function slide(e) {
+    const rect = slider.getBoundingClientRect();
+    let offsetX = e.clientX - rect.left;
+    offsetX = Math.max(0, Math.min(rect.width, offsetX));
+
+    const percent = (offsetX / rect.width) * 100;
+    afterImage.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+    handle.style.left = `${percent}%`;
+  }
+</script>
+
+</body>
+</html>
