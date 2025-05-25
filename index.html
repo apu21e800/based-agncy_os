@@ -44,6 +44,16 @@
       cursor: ew-resize;
     }
 
+    .slider-handle img {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      pointer-events: none;
+    }
+
     @media (max-width: 768px) {
       .slider-container {
         height: 70vh; /* Optional adjustment for mobile */
@@ -56,7 +66,9 @@
 <div class="slider-container" id="slider">
   <img src="img/future-1.jpg" class="before-image" alt="Before">
 <img src="img/future-2.jpg" class="after-image" id="afterImage" alt="After">
-  <div class="slider-handle" id="handle"></div>
+  <div class="slider-handle" id="handle">
+    <img src="img/monad2.png" alt="handle icon" class="handle-icon">
+  </div>
 </div>
 
 <script>
