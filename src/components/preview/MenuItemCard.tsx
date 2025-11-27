@@ -31,6 +31,12 @@ export function MenuItemCard({ style, item, theme, shadow }: MenuItemCardProps) 
     shadowClass[shadow]
   );
 
+  const addButton = (
+    <button className="flex items-center gap-2 rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white shadow-subtle">
+      + Add
+    </button>
+  );
+
   if (style === 'hero') {
     return (
       <article
@@ -61,6 +67,7 @@ export function MenuItemCard({ style, item, theme, shadow }: MenuItemCardProps) 
             </div>
             <span className="rounded-full bg-black/40 px-3 py-1">{item.price}</span>
           </div>
+          <div className="mt-1 flex justify-end">{addButton}</div>
         </div>
       </article>
     );
@@ -93,6 +100,7 @@ export function MenuItemCard({ style, item, theme, shadow }: MenuItemCardProps) 
               <BadgePill key={tag} label={tag} tone="allergen" selected />
             ))}
           </div>
+          <div className="flex items-center justify-end">{addButton}</div>
         </div>
       </article>
     );
@@ -116,6 +124,7 @@ export function MenuItemCard({ style, item, theme, shadow }: MenuItemCardProps) 
           <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-800">{item.price}</span>
           {item.image && <img src={item.image} alt="" className="h-16 w-20 rounded-lg object-cover" />}
         </div>
+        {addButton}
       </article>
     );
   }
@@ -144,6 +153,7 @@ export function MenuItemCard({ style, item, theme, shadow }: MenuItemCardProps) 
             <span className="rounded-full bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-700">Sample</span>
           )}
         </div>
+        <div className="mt-auto flex justify-end">{addButton}</div>
       </div>
     </article>
   );
