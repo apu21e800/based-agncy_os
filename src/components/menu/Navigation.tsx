@@ -20,7 +20,7 @@ export function Navigation({ currentView, onViewChange, restaurantName }: Naviga
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-gradient-to-br from-orange-600 to-amber-600 p-2">
+            <div className="rounded-lg bg-gradient-to-br from-purple-500 to-cyan-500 p-2">
               <Menu className="h-6 w-6 text-white" />
             </div>
             <div>
@@ -37,7 +37,7 @@ export function Navigation({ currentView, onViewChange, restaurantName }: Naviga
                 onClick={() => onViewChange(id)}
                 className={`relative rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   currentView === id
-                    ? 'text-orange-600'
+                    ? 'text-purple-600'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                 }`}
               >
@@ -48,7 +48,7 @@ export function Navigation({ currentView, onViewChange, restaurantName }: Naviga
                 {currentView === id && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-orange-600 to-amber-600"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-500 to-cyan-500"
                     initial={false}
                     transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                   />

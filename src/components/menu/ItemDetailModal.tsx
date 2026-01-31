@@ -1,253 +1,410 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, Star, AlertCircle, Wine, ChefHat } from 'lucide-react';
-import { MenuItem } from '../../state/menuConfig';
+import { useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import {
+  ArrowLeft,
+  X,
+  Clock,
+  Flame,
+  Leaf,
+  WheatOff,
+  Droplet,
+  ShieldCheck,
+  Check,
+  Minus,
+  Plus
+} from 'lucide-react';
+import { MenuConfig, MenuItem } from '../../state/menuConfig';
+import { useItemCustomization } from '../../hooks/useItemCustomization';
+import { formatPrice, parsePrice } from '../../utils/price';
 
 interface ItemDetailModalProps {
   item: MenuItem;
+  theme: MenuConfig['theme'];
   onClose: () => void;
+  onAddToCart: (item: MenuItem, quantity: number, totalPrice: number, notes: string) => void;
+  onAddPairing: (item: MenuItem) => void;
 }
 
-export function ItemDetailModal({ item, onClose }: ItemDetailModalProps) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const gallery = item.gallery ?? (item.image ? [item.image] : []);
+const dietaryIcons: Record<string, typeof Leaf> = {
+  vegan: Leaf,
+  vegetarian: Leaf,
+  'gluten-free': WheatOff,
+  'dairy-free': Droplet,
+  'nut-free': ShieldCheck
+};
 
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % gallery.length);
-  };
+function getDietaryIcon(type: string) {
+  return dietaryIcons[type] ?? Leaf;
+}
 
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + gallery.length) % gallery.length);
+export function ItemDetailModal({ item, theme, onClose, onAddToCart, onAddPairing }: ItemDetailModalProps) {
+  const prefersReducedMotion = useReducedMotion();
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [addedPairings, setAddedPairings] = useState<string[]>([]);
+  const [pricePulse, setPricePulse] = useState(false);
+  const {
+    selectedModifiers,
+    quantity,
+    specialInstructions,
+    errors,
+    modifiers,
+    setQuantity,
+    setSpecialInstructions,
+    selectOption,
+    toggleOption,
+    validate,
+    resetErrors
+  } = useItemCustomization(item);
+
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  const { basePrice, modifierTotal } = useMemo(() => {
+    let base = parsePrice(item.price);
+    let modifierSum = 0;
+    modifiers.forEach((group) => {
+      const selection = selectedModifiers[group.id];
+      if (!selection) return;
+      const isSizeGroup = group.required && group.name.toLowerCase().includes('size');
+      if (typeof selection === 'string') {
+        const option = group.options.find((opt) => opt.id === selection);
+        if (isSizeGroup && option) {
+          base = option.price;
+          return;
+        }
+        modifierSum += option?.price ?? 0;
+        return;
+      }
+      modifierSum += selection.reduce((groupSum, optionId) => {
+        const option = group.options.find((opt) => opt.id === optionId);
+        return groupSum + (option?.price ?? 0);
+      }, 0);
+    });
+    return { basePrice: base, modifierTotal: modifierSum };
+  }, [item.price, modifiers, selectedModifiers]);
+
+  const totalPrice = useMemo(() => {
+    return (basePrice + modifierTotal) * quantity;
+  }, [basePrice, modifierTotal, quantity]);
+
+  useEffect(() => {
+    setPricePulse(true);
+    const timer = window.setTimeout(() => setPricePulse(false), 300);
+    return () => window.clearTimeout(timer);
+  }, [totalPrice]);
+
+  const handleAddToCart = () => {
+    if (!validate()) return;
+    onAddToCart(item, quantity, totalPrice, specialInstructions);
+    onClose();
   };
 
   return (
     <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${item.name} details`}
     >
       <motion.div
-        initial={{ scale: 0.9, y: 20 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.9, y: 20 }}
-        onClick={(e) => e.stopPropagation()}
-        className="relative max-h-[90vh] w-full max-w-5xl overflow-auto rounded-2xl bg-white shadow-2xl"
+        className="relative flex h-full w-full max-w-5xl flex-col overflow-hidden bg-white"
+        initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 30, scale: prefersReducedMotion ? 1 : 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: prefersReducedMotion ? 0 : 30, scale: prefersReducedMotion ? 1 : 0.98 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        {/* Close Button */}
         <button
+          type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 z-10 rounded-full bg-white/90 backdrop-blur-sm p-2 text-slate-700 transition-all hover:bg-white hover:scale-110 shadow-lg"
+          className="absolute left-4 top-4 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow-lg backdrop-blur-sm transition hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+          aria-label="Back to menu"
         >
-          <X className="h-6 w-6" />
+          <ArrowLeft className="h-5 w-5" />
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-4 top-4 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow-lg backdrop-blur-sm transition hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+          aria-label="Close item details"
+        >
+          <X className="h-5 w-5" />
         </button>
 
-        {/* Image Gallery */}
-        <div className="relative h-80 sm:h-96 overflow-hidden bg-slate-900">
-          {gallery.length > 0 && (
-            <>
-              <img
-                src={gallery[currentImageIndex]}
-                alt={item.name}
-                className="h-full w-full object-cover"
-              />
-
-              {/* Gallery Navigation */}
-              {gallery.length > 1 && (
-                <>
-                  <button
-                    onClick={prevImage}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 backdrop-blur-sm p-2 text-slate-700 transition-all hover:bg-white hover:scale-110 shadow-lg"
-                  >
-                    <ChevronLeft className="h-6 w-6" />
-                  </button>
-                  <button
-                    onClick={nextImage}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 backdrop-blur-sm p-2 text-slate-700 transition-all hover:bg-white hover:scale-110 shadow-lg"
-                  >
-                    <ChevronRight className="h-6 w-6" />
-                  </button>
-
-                  {/* Gallery Dots */}
-                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                    {gallery.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentImageIndex(index)}
-                        className={`h-2 rounded-full transition-all ${
-                          index === currentImageIndex
-                            ? 'w-8 bg-white'
-                            : 'w-2 bg-white/50 hover:bg-white/75'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </>
-              )}
-
-              {/* Premium Badges Overlay */}
-              <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                {item.isFeatured && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50/95 backdrop-blur-sm px-3 py-1.5 text-sm font-semibold text-amber-700 border border-amber-200 shadow-lg">
-                    <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
-                    Featured
-                  </span>
-                )}
-                {item.isChefFavorite && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-purple-50/95 backdrop-blur-sm px-3 py-1.5 text-sm font-semibold text-purple-700 border border-purple-200 shadow-lg">
-                    <ChefHat className="h-4 w-4" />
-                    Chef's Favorite
-                  </span>
-                )}
-              </div>
-            </>
+        <div className="relative h-[320px] w-full sm:h-[480px]">
+          {item.image && (
+            <button
+              type="button"
+              onClick={() => setLightboxOpen(true)}
+              className="h-full w-full"
+              aria-label="Open image preview"
+            >
+              <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+            </button>
           )}
-        </div>
-
-        {/* Content */}
-        <div className="p-8">
-          {/* Header */}
-          <div className="mb-6 flex items-start justify-between gap-4">
-            <div className="flex-1">
-              <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl">
-                {item.name}
-              </h2>
-              <p className="mt-2 text-lg text-slate-600">
-                {item.description}
-              </p>
-
-              {/* Rating */}
-              {item.rating && (
-                <div className="mt-3 flex items-center gap-2">
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`h-5 w-5 ${
-                          i < Math.floor(item.rating!)
-                            ? 'fill-amber-400 text-amber-400'
-                            : 'fill-slate-200 text-slate-200'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-sm font-semibold text-slate-900">
-                    {item.rating.toFixed(1)}
-                  </span>
-                  {item.reviewCount && (
-                    <span className="text-sm text-slate-500">
-                      ({item.reviewCount} reviews)
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Price */}
-            <div className="flex-shrink-0">
-              <div className="rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 px-6 py-4 shadow-lg">
-                <p className="text-3xl font-bold text-white">{item.price}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Tags */}
-          <div className="mb-6 flex flex-wrap gap-2">
-            {item.tags.map((tag) => (
+          <div className="absolute left-6 top-6 flex flex-wrap gap-2">
+            {item.badges?.map((badge) => (
               <span
-                key={tag}
-                className="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700"
+                key={badge.label}
+                className="inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-900"
               >
-                {tag}
+                {badge.label}
               </span>
             ))}
           </div>
+        </div>
 
-          <div className="grid gap-6 lg:grid-cols-2">
-            {/* Ingredients */}
-            {item.ingredients && item.ingredients.length > 0 && (
-              <div className="rounded-xl bg-slate-50 p-6 border border-slate-200">
-                <h3 className="mb-4 text-lg font-bold text-slate-900">Ingredients</h3>
-                <ul className="space-y-2">
-                  {item.ingredients.map((ingredient, index) => (
-                    <li key={index} className="flex items-center gap-2 text-sm text-slate-700">
-                      <div className="h-1.5 w-1.5 rounded-full bg-orange-500" />
-                      {ingredient}
-                    </li>
-                  ))}
-                </ul>
+        <div className="flex-1 overflow-y-auto">
+          <div className="mx-auto max-w-3xl px-6 py-8">
+            <div className="mb-6">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <h2 className="text-3xl font-bold sm:text-4xl" style={{ color: theme.textPrimary }}>
+                  {item.name}
+                </h2>
+                <span className="text-2xl font-bold" style={{ color: theme.textPrimary }}>
+                  {item.price}
+                </span>
               </div>
-            )}
-
-            {/* Allergens */}
-            {item.allergens && item.allergens.length > 0 && (
-              <div className="rounded-xl bg-red-50 p-6 border border-red-200">
-                <div className="flex items-center gap-2 mb-4">
-                  <AlertCircle className="h-5 w-5 text-red-600" />
-                  <h3 className="text-lg font-bold text-red-900">Allergen Information</h3>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {item.allergens.map((allergen) => (
-                    <span
-                      key={allergen}
-                      className="rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-700 border border-red-200"
-                    >
-                      {allergen}
+              <div className="mt-4 flex flex-wrap gap-4 text-sm" style={{ color: theme.textSecondary }}>
+                {item.dietary?.map((tag) => {
+                  const Icon = getDietaryIcon(tag.type);
+                  return (
+                    <span key={tag.label} className="inline-flex items-center gap-1">
+                      <Icon className="h-4 w-4" aria-hidden="true" />
+                      {tag.label}
                     </span>
-                  ))}
-                </div>
+                  );
+                })}
+                {item.prepTime && (
+                  <span className="inline-flex items-center gap-1">
+                    <Clock className="h-4 w-4" aria-hidden="true" />
+                    {item.prepTime} min
+                  </span>
+                )}
+                {item.calories && (
+                  <span className="inline-flex items-center gap-1">
+                    <Flame className="h-4 w-4" aria-hidden="true" />
+                    {item.calories} cal
+                  </span>
+                )}
               </div>
+              <p className="mt-4 text-base leading-relaxed" style={{ color: theme.textSecondary }}>
+                {item.description}
+              </p>
+            </div>
+
+            {modifiers.map((group) => {
+              const selected = selectedModifiers[group.id];
+              const groupError = errors[group.id];
+              return (
+                <section key={group.id} className="border-t border-slate-200 py-6">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="text-lg font-semibold" style={{ color: theme.textPrimary }}>
+                      {group.name}
+                    </h3>
+                    {group.required ? (
+                      <span className="rounded bg-red-100 px-2 py-1 text-xs font-semibold uppercase text-red-700">
+                        Required
+                      </span>
+                    ) : (
+                      <span className="text-xs text-slate-500">Optional</span>
+                    )}
+                  </div>
+                  <div className="space-y-3">
+                    {group.options.map((option) => {
+                      const isSelected =
+                        typeof selected === 'string'
+                          ? selected === option.id
+                          : Array.isArray(selected) && selected.includes(option.id);
+                      return (
+                        <button
+                          key={option.id}
+                          type="button"
+                          onClick={() => {
+                            resetErrors(group.id);
+                            if (group.required) {
+                              selectOption(group.id, option.id);
+                              return;
+                            }
+                            toggleOption(group.id, option.id);
+                          }}
+                          className={
+                            'flex w-full items-center justify-between rounded-xl border-2 px-4 py-4 text-left transition ' +
+                            (isSelected
+                              ? 'border-purple-500 bg-purple-50/50'
+                              : groupError
+                              ? 'border-red-400 bg-red-50/40'
+                              : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50')
+                          }
+                        >
+                          <div className="flex items-start gap-3">
+                            <div
+                              className={
+                                'mt-1 flex h-6 w-6 items-center justify-center rounded-full border-2 transition ' +
+                                (group.required ? 'rounded-full' : 'rounded-md') +
+                                (isSelected ? 'border-purple-500' : 'border-slate-300')
+                              }
+                              style={
+                                isSelected
+                                  ? {
+                                      background: `linear-gradient(135deg, ${theme.primaryGradient.start} 0%, ${theme.primaryGradient.end} 100%)`
+                                    }
+                                  : undefined
+                              }
+                            >
+                              {isSelected && <Check className="h-4 w-4 text-white" />}
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold" style={{ color: theme.textPrimary }}>
+                                {option.name}
+                              </p>
+                              {option.description && (
+                                <p className="mt-1 text-xs" style={{ color: theme.textSecondary }}>
+                                  {option.description}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                          <span className="text-sm font-semibold" style={{ color: theme.textPrimary }}>
+                            {formatPrice(option.price)}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {groupError && <p className="mt-2 text-sm text-red-600">{groupError}</p>}
+                </section>
+              );
+            })}
+
+            <section className="border-t border-slate-200 py-6">
+              <h3 className="mb-3 text-lg font-semibold" style={{ color: theme.textPrimary }}>
+                Special Instructions
+              </h3>
+              <textarea
+                value={specialInstructions}
+                onChange={(event) => setSpecialInstructions(event.target.value)}
+                placeholder='E.g., "No garlic" or "Extra spicy"'
+                className="min-h-[100px] w-full rounded-xl border-2 border-slate-200 px-4 py-3 text-sm text-slate-900 focus:border-purple-500 focus:outline-none"
+              />
+            </section>
+
+            {item.pairings && item.pairings.length > 0 && (
+              <section className="border-t border-slate-200 py-6">
+                <h3 className="mb-4 text-xl font-semibold" style={{ color: theme.textPrimary }}>
+                  Perfect Pairings
+                </h3>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {item.pairings.map((pairing) => {
+                    const added = addedPairings.includes(pairing.id);
+                    return (
+                      <button
+                        key={pairing.id}
+                        type="button"
+                        onClick={() => {
+                          setAddedPairings((prev) => {
+                            if (prev.includes(pairing.id)) {
+                              return prev.filter((id) => id !== pairing.id);
+                            }
+                            onAddPairing(pairing);
+                            return [...prev, pairing.id];
+                          });
+                        }}
+                        className={
+                          'overflow-hidden rounded-xl border-2 text-left transition hover:scale-[1.02] ' +
+                          (added ? 'border-purple-500' : 'border-slate-200')
+                        }
+                      >
+                        {pairing.image && (
+                          <img src={pairing.image} alt={pairing.name} className="aspect-square w-full object-cover" loading="lazy" />
+                        )}
+                        <div className="p-3">
+                          <div className="flex items-center justify-between">
+                          <p className="text-sm font-semibold" style={{ color: theme.textPrimary }}>
+                            {pairing.name}
+                          </p>
+                            {added && (
+                              <span
+                                className="inline-flex h-6 w-6 items-center justify-center rounded-full text-white"
+                                style={{
+                                  background: `linear-gradient(135deg, ${theme.primaryGradient.start} 0%, ${theme.primaryGradient.end} 100%)`
+                                }}
+                              >
+                                <Check className="h-4 w-4" />
+                              </span>
+                            )}
+                          </div>
+                          <p className="mt-1 text-xs" style={{ color: theme.textSecondary }}>
+                            {pairing.price}
+                          </p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
             )}
           </div>
+        </div>
 
-          {/* Chef's Notes */}
-          {item.chefNotes && (
-            <div className="mt-6 rounded-xl bg-gradient-to-br from-purple-50 to-blue-50 p-6 border border-purple-200">
-              <div className="flex items-start gap-3">
-                <ChefHat className="h-6 w-6 text-purple-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">Chef's Notes</h3>
-                  <p className="text-sm text-slate-700 leading-relaxed">{item.chefNotes}</p>
-                </div>
-              </div>
+        <div className="sticky bottom-0 border-t border-slate-200 bg-white px-6 py-4 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+          <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 sm:flex-row sm:items-center">
+            <div className="flex items-center justify-center gap-4 rounded-xl border-2 border-slate-200 px-4 py-2">
+              <button
+                type="button"
+                onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                className="flex h-11 w-11 items-center justify-center rounded-md text-slate-600 transition hover:bg-slate-100"
+                disabled={quantity === 1}
+                aria-label="Decrease quantity"
+              >
+                <Minus className="h-4 w-4" />
+              </button>
+              <span className="min-w-[32px] text-center text-lg font-semibold text-slate-900">{quantity}</span>
+              <button
+                type="button"
+                onClick={() => setQuantity((prev) => prev + 1)}
+                className="flex h-11 w-11 items-center justify-center rounded-md text-slate-600 transition hover:bg-slate-100"
+                aria-label="Increase quantity"
+              >
+                <Plus className="h-4 w-4" />
+              </button>
             </div>
-          )}
-
-          {/* Food Pairings */}
-          {item.foodPairings && item.foodPairings.length > 0 && (
-            <div className="mt-6 rounded-xl bg-gradient-to-br from-amber-50 to-yellow-50 p-6 border border-amber-200">
-              <div className="flex items-center gap-2 mb-4">
-                <Wine className="h-6 w-6 text-amber-700" />
-                <h3 className="text-lg font-bold text-slate-900">Recommended Pairings</h3>
-              </div>
-              <div className="space-y-4">
-                {item.foodPairings.map((pairing, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-amber-600 text-white flex items-center justify-center text-sm font-bold">
-                      {index + 1}
-                    </div>
-                    <div>
-                      <p className="font-semibold text-slate-900">{pairing.name}</p>
-                      <p className="text-sm text-slate-600 mt-1">{pairing.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Action Button */}
-          <div className="mt-8 flex gap-4">
-            <button className="flex-1 rounded-full bg-gradient-to-r from-orange-600 to-amber-600 px-8 py-4 text-lg font-bold text-white shadow-lg transition-all hover:shadow-xl hover:scale-105">
-              Add to Order
-            </button>
-            <button className="rounded-full border-2 border-orange-600 px-8 py-4 text-lg font-bold text-orange-600 transition-all hover:bg-orange-50">
-              Share
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              className="flex h-14 flex-1 items-center justify-center gap-2 rounded-xl text-base font-semibold text-white shadow-lg transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+              style={{
+                background: `linear-gradient(135deg, ${theme.primaryGradient.start} 0%, ${theme.primaryGradient.end} 100%)`
+              }}
+            >
+              Add to Cart · <span className={pricePulse ? 'price-pulse' : ''}>{formatPrice(totalPrice)}</span>
             </button>
           </div>
         </div>
       </motion.div>
+
+      <AnimatePresence>
+        {lightboxOpen && item.image && (
+          <motion.button
+            type="button"
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setLightboxOpen(false)}
+            aria-label="Close image preview"
+          >
+            <img src={item.image} alt={item.name} className="max-h-[90vh] w-auto rounded-2xl" />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

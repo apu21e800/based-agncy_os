@@ -2,10 +2,53 @@ export type NavigationLayout = 'horizontal' | 'sidebar';
 export type NavigationStyle = 'filled' | 'outlined' | 'ghost';
 export type CardStyle = 'compact' | 'feature' | 'list' | 'hero' | 'square' | 'rectangle';
 export type ShadowLevel = 'off' | 'subtle' | 'medium' | 'strong';
+export type GridColumns = '1' | '2' | '3' | 'auto';
+export type GridGap = 'compact' | 'comfortable' | 'spacious';
+export type CardStyleVariant = 'elevated' | 'flat' | 'outlined' | 'minimal';
+export type ImageAspectRatio = 'square' | 'landscape' | 'portrait' | 'none';
+export type ImagePosition = 'top' | 'left' | 'right' | 'background';
+export type DescriptionDisplay = 'full' | 'truncated' | 'hidden';
+export type ContentDensity = 'compact' | 'comfortable' | 'spacious';
+export type NavigationLayoutSetting = 'top' | 'sidebar' | 'auto';
+export type NavigationSpacing = 'compact' | 'comfortable' | 'spacious';
+export type TypographyTransform = 'none' | 'uppercase';
+export type TypographyWeight = 'medium' | 'semibold' | 'bold';
+export type TypographySize = 'sm' | 'base' | 'lg';
+export type ShadowElevation = 'none' | 'low' | 'medium' | 'high';
 
 export interface FoodPairing {
   name: string;
   description: string;
+}
+
+export interface MenuBadge {
+  type: 'popular' | 'new' | 'spicy' | 'custom';
+  label: string;
+  color?: string;
+  icon?: string;
+}
+
+export interface DietaryTag {
+  type: 'vegan' | 'vegetarian' | 'gluten-free' | 'dairy-free' | 'nut-free';
+  label: string;
+  icon?: string;
+}
+
+export interface ModifierOption {
+  id: string;
+  name: string;
+  description?: string;
+  price: number;
+  default?: boolean;
+}
+
+export interface ModifierGroup {
+  id: string;
+  name: string;
+  required: boolean;
+  min?: number;
+  max?: number;
+  options: ModifierOption[];
 }
 
 export interface MenuItem {
@@ -20,6 +63,12 @@ export interface MenuItem {
   foodPairings?: FoodPairing[];
   chefNotes?: string;
   ingredients?: string[];
+  prepTime?: number;
+  calories?: number;
+  badges?: MenuBadge[];
+  dietary?: DietaryTag[];
+  modifierGroups?: ModifierGroup[];
+  pairings?: MenuItem[];
   isSample?: boolean;
   isFeatured?: boolean;
   isChefFavorite?: boolean;
@@ -70,6 +119,45 @@ export interface ThemeConfig {
   accent: string;
 }
 
+export interface MenuDisplaySettings {
+  columns: GridColumns;
+  gap: GridGap;
+  cardStyle: CardStyleVariant;
+  imageAspectRatio: ImageAspectRatio;
+  imagePosition: ImagePosition;
+  density: ContentDensity;
+  descriptionDisplay: DescriptionDisplay;
+  showPrepTime: boolean;
+  showDietaryIcons: boolean;
+  showCalories: boolean;
+  showBadges: boolean;
+}
+
+export interface NavigationSettings {
+  layout: NavigationLayoutSetting;
+  style: NavigationStyle;
+  sticky: boolean;
+  showIcons: boolean;
+  showCounts: boolean;
+  spacing: NavigationSpacing;
+  typography: {
+    size: TypographySize;
+    weight: TypographyWeight;
+    transform: TypographyTransform;
+  };
+}
+
+export interface ThemeSettings {
+  primaryGradient: { start: string; end: string };
+  background: string;
+  textPrimary: string;
+  textSecondary: string;
+  cardBackground: string;
+  cardBorder: string;
+  borderRadius: number;
+  shadowElevation: ShadowElevation;
+}
+
 export interface MenuConfig {
   navigationLayout: NavigationLayout;
   navigationStyle: NavigationStyle;
@@ -77,10 +165,40 @@ export interface MenuConfig {
   columnsDefault: number;
   shadow: ShadowLevel;
   colors: ThemeConfig;
+  menuDisplay: MenuDisplaySettings;
+  navigationSettings: NavigationSettings;
+  theme: ThemeSettings;
   categories: CategoryConfig[];
   restaurantInfo: RestaurantInfo;
   chefSpecials?: ChefSpecial[];
 }
+
+const defaultSizeModifiers: ModifierGroup[] = [
+  {
+    id: 'size',
+    name: 'Choose Your Size',
+    required: true,
+    options: [
+      { id: 'small', name: 'Small Plate (2 pieces)', price: 8.99 },
+      { id: 'regular', name: 'Regular (3 pieces)', price: 12.99, default: true },
+      { id: 'large', name: 'Large Platter (6 pieces)', price: 22.99 }
+    ]
+  }
+];
+
+const defaultExtraModifiers: ModifierGroup[] = [
+  {
+    id: 'extras',
+    name: 'Add Extras',
+    required: false,
+    max: 3,
+    options: [
+      { id: 'olive-oil', name: 'Extra Virgin Olive Oil', price: 1.5 },
+      { id: 'burrata', name: 'Burrata Cheese', price: 4 },
+      { id: 'prosciutto', name: 'Prosciutto', price: 5 }
+    ]
+  }
+];
 
 const premiumMenuItems: MenuItem[] = [
   {
@@ -96,6 +214,43 @@ const premiumMenuItems: MenuItem[] = [
     ],
     tags: ['Vegetarian', 'Chef\'s Favorite'],
     allergens: ['Gluten', 'Dairy'],
+    prepTime: 12,
+    calories: 620,
+    badges: [
+      { type: 'popular', label: 'Popular' },
+      { type: 'new', label: 'New' }
+    ],
+    dietary: [{ type: 'vegetarian', label: 'Vegetarian' }],
+    modifierGroups: [...defaultSizeModifiers, ...defaultExtraModifiers],
+    pairings: [
+      {
+        id: 'caprese-salad',
+        name: 'Caprese Salad',
+        description: 'Heirloom tomatoes, basil, buffalo mozzarella.',
+        price: '$8.99',
+        image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=400&q=80',
+        tags: ['Vegetarian'],
+        allergens: ['Dairy']
+      },
+      {
+        id: 'arancini-balls',
+        name: 'Arancini Balls',
+        description: 'Crispy saffron risotto, truffle aioli.',
+        price: '$7.99',
+        image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=400&q=80',
+        tags: ['Popular'],
+        allergens: ['Dairy', 'Gluten']
+      },
+      {
+        id: 'pinot-grigio',
+        name: 'Pinot Grigio',
+        description: 'Crisp, floral white wine pairing.',
+        price: '$12.00',
+        image: 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=400&q=80',
+        tags: ['Wine'],
+        allergens: []
+      }
+    ],
     ingredients: ['Pizza dough', 'Black truffle oil', 'Shiitake mushrooms', 'Oyster mushrooms', 'Mozzarella', 'Fresh thyme', 'Parmesan'],
     foodPairings: [
       { name: 'Pinot Noir', description: 'Earthy notes complement the truffle' },
@@ -119,6 +274,11 @@ const premiumMenuItems: MenuItem[] = [
     ],
     tags: ['Spicy', 'Popular'],
     allergens: ['Shellfish', 'Gluten'],
+    prepTime: 8,
+    calories: 480,
+    badges: [{ type: 'popular', label: 'Popular' }, { type: 'spicy', label: 'Spicy' }],
+    dietary: [{ type: 'dairy-free', label: 'Dairy-Free' }],
+    modifierGroups: [...defaultSizeModifiers, ...defaultExtraModifiers],
     ingredients: ['Fresh squid', 'Semolina flour', 'San Marzano tomatoes', 'Calabrian chili', 'Lemon', 'Garlic aioli'],
     foodPairings: [
       { name: 'Prosecco', description: 'Crisp bubbles cut through the richness' },
@@ -144,6 +304,10 @@ const mainCourseItems: MenuItem[] = [
     ],
     tags: ['Gluten Free', 'Healthy'],
     allergens: ['Fish'],
+    prepTime: 18,
+    calories: 540,
+    badges: [{ type: 'popular', label: 'Popular' }],
+    dietary: [{ type: 'gluten-free', label: 'Gluten-Free' }],
     ingredients: ['Atlantic salmon', 'Tri-color quinoa', 'Asparagus', 'Cherry tomatoes', 'Lemon herb butter'],
     foodPairings: [
       { name: 'Chardonnay', description: 'Buttery richness enhances the salmon' },
@@ -166,6 +330,10 @@ const mainCourseItems: MenuItem[] = [
     ],
     tags: ['Signature', 'Popular'],
     allergens: ['Gluten', 'Dairy'],
+    prepTime: 15,
+    calories: 780,
+    badges: [{ type: 'popular', label: 'Popular' }],
+    dietary: [{ type: 'nut-free', label: 'Nut-Free' }],
     ingredients: ['Wagyu beef', 'Brioche bun', '18-month aged cheddar', 'House bacon jam', 'Arugula', 'Truffle aioli'],
     foodPairings: [
       { name: 'Cabernet Sauvignon', description: 'Bold tannins match the rich beef' },
@@ -190,6 +358,10 @@ const mainCourseItems: MenuItem[] = [
     ],
     tags: ['Premium', 'Chef\'s Favorite'],
     allergens: ['Shellfish', 'Gluten', 'Dairy'],
+    prepTime: 16,
+    calories: 640,
+    badges: [{ type: 'new', label: 'New' }],
+    dietary: [{ type: 'dairy-free', label: 'Dairy-Free' }],
     ingredients: ['Fresh pasta', 'Maine lobster', 'Tomato cream sauce', 'Vodka', 'Fresh basil', 'Parmesan'],
     foodPairings: [
       { name: 'Pinot Grigio', description: 'Light and crisp to complement shellfish' },
@@ -360,6 +532,42 @@ export const defaultMenuConfig: MenuConfig = {
     text: '#0f172a',
     accent: '#f97316'
   },
+  menuDisplay: {
+    columns: 'auto',
+    gap: 'comfortable',
+    cardStyle: 'elevated',
+    imageAspectRatio: 'landscape',
+    imagePosition: 'top',
+    density: 'comfortable',
+    descriptionDisplay: 'truncated',
+    showPrepTime: true,
+    showDietaryIcons: true,
+    showCalories: true,
+    showBadges: true
+  },
+  navigationSettings: {
+    layout: 'auto',
+    style: 'filled',
+    sticky: true,
+    showIcons: true,
+    showCounts: true,
+    spacing: 'comfortable',
+    typography: {
+      size: 'base',
+      weight: 'semibold',
+      transform: 'none'
+    }
+  },
+  theme: {
+    primaryGradient: { start: '#A855F7', end: '#06B6D4' },
+    background: '#F8FAFC',
+    textPrimary: '#111827',
+    textSecondary: '#6B7280',
+    cardBackground: '#FFFFFF',
+    cardBorder: '#E5E7EB',
+    borderRadius: 12,
+    shadowElevation: 'medium'
+  },
   restaurantInfo,
   chefSpecials,
   categories: [
@@ -410,7 +618,10 @@ export function createEmptyItem(id: string): MenuItem {
     description: '',
     price: '$0.00',
     tags: [],
-    allergens: []
+    allergens: [],
+    badges: [],
+    dietary: [],
+    modifierGroups: []
   };
 }
 
