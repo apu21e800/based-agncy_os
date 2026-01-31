@@ -26,6 +26,12 @@ export interface MenuConfigActions {
   setDefaultStyle: (style: CardStyle) => void;
   setDefaultColumns: (columns: number) => void;
   toggleBadge: (categoryId: string, itemId: string, type: 'tags' | 'allergens', label: string) => void;
+  updateMenuDisplay: <K extends keyof MenuConfig['menuDisplay']>(key: K, value: MenuConfig['menuDisplay'][K]) => void;
+  updateNavigationSettings: <K extends keyof MenuConfig['navigationSettings']>(
+    key: K,
+    value: MenuConfig['navigationSettings'][K]
+  ) => void;
+  updateThemeSettings: <K extends keyof MenuConfig['theme']>(key: K, value: MenuConfig['theme'][K]) => void;
 }
 
 export function useMenuConfig(): [MenuConfig, MenuConfigActions] {
@@ -84,13 +90,21 @@ export function useMenuConfig(): [MenuConfig, MenuConfigActions] {
       updateNavigationLayout: (layout: NavigationLayout) => {
         setConfig((prev) => ({
           ...prev,
-          navigationLayout: layout
+          navigationLayout: layout,
+          navigationSettings: {
+            ...prev.navigationSettings,
+            layout: layout === 'sidebar' ? 'sidebar' : 'top'
+          }
         }));
       },
       updateNavigationStyle: (style: NavigationStyle) => {
         setConfig((prev) => ({
           ...prev,
-          navigationStyle: style
+          navigationStyle: style,
+          navigationSettings: {
+            ...prev.navigationSettings,
+            style
+          }
         }));
       },
       updateThemeColor: (key, value) => {
@@ -138,6 +152,33 @@ export function useMenuConfig(): [MenuConfig, MenuConfigActions] {
               })
             };
           })
+        }));
+      },
+      updateMenuDisplay: (key, value) => {
+        setConfig((prev) => ({
+          ...prev,
+          menuDisplay: {
+            ...prev.menuDisplay,
+            [key]: value
+          }
+        }));
+      },
+      updateNavigationSettings: (key, value) => {
+        setConfig((prev) => ({
+          ...prev,
+          navigationSettings: {
+            ...prev.navigationSettings,
+            [key]: value
+          }
+        }));
+      },
+      updateThemeSettings: (key, value) => {
+        setConfig((prev) => ({
+          ...prev,
+          theme: {
+            ...prev.theme,
+            [key]: value
+          }
         }));
       }
     }),
