@@ -1,0 +1,28 @@
+# === WEB DEVELOPMENT (Node/Next.js) ===
+node_modules/
+.next/
+dist/
+build/
+.env*
+npm-debug.log*
+
+# === CREATIVE SUITE (Premiere/After Effects) ===
+**/Adobe Premiere Pro Video Previews/
+**/Adobe Premiere Pro Audio Previews/
+**/Media Cache Files/
+**/Encoded Files/
+*.prlock
+*.asnd
+*.prmdc
+*.otio
+
+# === SYSTEM & CLOUD CLUTTER ===
+.DS_Store
+Thumbs.db
+desktop.ini
+# Keep OneDrive temp files out
+*.tmp
+~$*
+
+# === CLAUDE & AI LOGS ===
+.claudecode/
