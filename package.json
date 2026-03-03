@@ -1,0 +1,9 @@
+{
+  "name": "based-agency-root",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "cd Web_Projects/based-eats-app && npm run dev",
+    "optimize": "node optimize-assets.js",
+    "deploy": "git add . && git commit -m \"Agency Update\" && git push origin main"
+  }
+}
