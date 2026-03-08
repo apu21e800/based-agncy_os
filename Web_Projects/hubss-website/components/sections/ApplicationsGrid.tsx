@@ -3,17 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-
-const applications = [
-  { name: "Crosswalks", slug: "crosswalks", seed: "hubss-app1", col: "col-span-2 row-span-2" },
-  { name: "Bus & Bike Lanes", slug: "bus-bike-lanes", seed: "hubss-app2", col: "" },
-  { name: "Driveways", slug: "driveways", seed: "hubss-app3", col: "" },
-  { name: "Public Art", slug: "public-art", seed: "hubss-app4", col: "row-span-2" },
-  { name: "Regulatory Markings", slug: "regulatory-markings", seed: "hubss-app5", col: "" },
-  { name: "Parks & Paths", slug: "parks-paths", seed: "hubss-app6", col: "col-span-2" },
-  { name: "Community Branding", slug: "community-branding", seed: "hubss-app7", col: "" },
-  { name: "Parking Lots", slug: "parking-lots", seed: "hubss-app8", col: "" },
-];
+import { applications } from "@/lib/applications";
 
 export default function ApplicationsGrid() {
   return (
@@ -32,7 +22,7 @@ export default function ApplicationsGrid() {
         </div>
 
         <div
-          className="grid grid-cols-4 gap-3"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
           style={{ gridAutoRows: "200px" }}
         >
           {applications.map((app, i) => (
@@ -42,18 +32,17 @@ export default function ApplicationsGrid() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.06 }}
-              className={`relative overflow-hidden group ${app.col}`}
+              className={`relative overflow-hidden group ${app.col ?? ""}`}
               style={{ borderRadius: "4px" }}
             >
               <Link href={`/applications/${app.slug}`} className="block w-full h-full">
                 <Image
-                  src={`https://picsum.photos/seed/${app.seed}/800/600`}
+                  src={app.imageUrl}
                   alt={app.name}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 768px) 50vw, 25vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
-                {/* Overlay */}
                 <div
                   className="absolute inset-0 transition-opacity"
                   style={{ background: "rgba(26,26,26,0.55)" }}

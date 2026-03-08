@@ -1,18 +1,14 @@
+import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import Image from "next/image";
 import Link from "next/link";
+import { applications } from "@/lib/applications";
 
-const applications = [
-  { name: "Crosswalks", slug: "crosswalks", seed: "hubss-app1", desc: "High-visibility pedestrian crossings that save lives and support Vision Zero frameworks across Canadian municipalities." },
-  { name: "Bus & Bike Lanes", slug: "bus-bike-lanes", seed: "hubss-app2", desc: "Dedicated transit and cycling infrastructure markings that define Complete Streets corridors." },
-  { name: "Driveways", slug: "driveways", seed: "hubss-app3", desc: "Decorative stamped asphalt and colour coatings for residential and commercial entrance treatments." },
-  { name: "Public Art", slug: "public-art", seed: "hubss-app4", desc: "Street-scale murals and artistic pavement installations celebrating community identity." },
-  { name: "Regulatory Markings", slug: "regulatory-markings", seed: "hubss-app5", desc: "AODA-compliant safety markings, symbols, and wayfinding systems for accessible public infrastructure." },
-  { name: "Parks & Paths", slug: "parks-paths", seed: "hubss-app6", desc: "Trail markings, plaza treatments, and recreational surface coatings for parks and greenways." },
-  { name: "Community Branding", slug: "community-branding", seed: "hubss-app7", desc: "Municipal identity and placemaking surfaces that give neighbourhoods a distinctive visual character." },
-  { name: "Parking Lots", slug: "parking-lots", seed: "hubss-app8", desc: "Durable markings, stall delineation, and protective coatings for commercial and municipal parking facilities." },
-];
+export const metadata: Metadata = {
+  title: "Applications | HUB Surface Systems",
+  description: "From crosswalks and bus lanes to airports and community branding — HUB Surface Systems delivers the right pavement solution for every application.",
+};
 
 export default function ApplicationsPage() {
   return (
@@ -43,7 +39,7 @@ export default function ApplicationsPage() {
               style={{ aspectRatio: "4/3" }}
             >
               <Image
-                src={`https://picsum.photos/seed/${app.seed}/800/600`}
+                src={app.imageUrl}
                 alt={app.name}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -53,7 +49,9 @@ export default function ApplicationsPage() {
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "rgba(249,115,22,0.2)" }} />
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <h2 className="font-bold text-lg mb-1" style={{ color: "#f5f0eb" }}>{app.name}</h2>
-                <p className="text-xs leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#f5f0eb" }}>{app.desc}</p>
+                <p className="text-xs leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#f5f0eb" }}>
+                  {app.desc.slice(0, 80)}...
+                </p>
               </div>
             </Link>
           ))}

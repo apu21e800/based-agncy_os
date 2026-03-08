@@ -4,6 +4,9 @@ import { useState } from "react";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 
+// Note: metadata must be in a server component — defined in layout or a parallel route.
+// Page-level metadata for client components requires moving meta to a parent layout.
+
 const projectTypes = [
   "Crosswalk / Pedestrian Safety",
   "Bus & Bike Lane Markings",
@@ -16,6 +19,8 @@ const projectTypes = [
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: "", company: "", email: "", phone: "", projectType: "", message: ""
   });
@@ -64,7 +69,31 @@ export default function ContactPage() {
                 <p className="text-sm" style={{ color: "#9ca3af" }}>We&apos;ll be in touch within one business day.</p>
               </div>
             ) : (
-              <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="space-y-5">
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setLoading(true);
+                  setError("");
+                  try {
+                    const res = await fetch("/api/contact", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ ...form, formType: "contact", website: "" }),
+                    });
+                    const data = await res.json();
+                    if (!res.ok || data.error) {
+                      setError(data.error ?? "Something went wrong. Please try again.");
+                    } else {
+                      setSubmitted(true);
+                    }
+                  } catch {
+                    setError("Network error. Please check your connection and try again.");
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                className="space-y-5"
+              >
                 <div className="grid grid-cols-2 gap-4">
                   {[
                     { label: "Full Name", key: "name", type: "text", placeholder: "Jane Smith" },
@@ -78,7 +107,7 @@ export default function ContactPage() {
                         value={form[f.key as keyof typeof form]}
                         onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
                         placeholder={f.placeholder}
-                        className="w-full px-4 py-3 rounded-lg text-sm outline-none"
+                        className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:ring-1 focus:ring-orange-500"
                         style={{ background: "#1a1a1a", border: "1px solid #333", color: "#f5f0eb" }}
                       />
                     </div>
@@ -96,7 +125,7 @@ export default function ContactPage() {
                       value={form[f.key as keyof typeof form]}
                       onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
                       placeholder={f.placeholder}
-                      className="w-full px-4 py-3 rounded-lg text-sm outline-none"
+                      className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:ring-1 focus:ring-orange-500"
                       style={{ background: "#1a1a1a", border: "1px solid #333", color: "#f5f0eb" }}
                     />
                   </div>
@@ -106,7 +135,7 @@ export default function ContactPage() {
                   <select
                     value={form.projectType}
                     onChange={(e) => setForm({ ...form, projectType: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg text-sm outline-none"
+                    className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:ring-1 focus:ring-orange-500"
                     style={{ background: "#1a1a1a", border: "1px solid #333", color: "#f5f0eb" }}
                   >
                     <option value="">Select project type...</option>
@@ -120,16 +149,31 @@ export default function ContactPage() {
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     placeholder="Tell us about your project..."
-                    className="w-full px-4 py-3 rounded-lg text-sm outline-none resize-none"
+                    className="w-full px-4 py-3 rounded-lg text-sm outline-none resize-none focus:ring-1 focus:ring-orange-500"
                     style={{ background: "#1a1a1a", border: "1px solid #333", color: "#f5f0eb" }}
                   />
                 </div>
+                {/* Honeypot — hidden from real users */}
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  className="hidden"
+                  aria-hidden="true"
+                />
+
+                {error && (
+                  <p className="text-sm text-red-400">{error}</p>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full font-semibold py-4 rounded-lg text-sm transition-colors"
+                  disabled={loading}
+                  className="w-full font-semibold py-4 rounded-lg text-sm transition-all disabled:opacity-60"
                   style={{ background: "#f97316", color: "#fff" }}
                 >
-                  Send Message
+                  {loading ? "Sending..." : "Send Message"}
                 </button>
               </form>
             )}

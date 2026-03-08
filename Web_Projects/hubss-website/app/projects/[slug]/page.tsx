@@ -4,6 +4,7 @@ import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import { projects } from "@/lib/projects";
+import { products } from "@/lib/products";
 
 export async function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -16,6 +17,8 @@ export default async function ProjectPage({ params }: Props) {
   const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
 
+  const productEntry = products.find((p) => p.name === project.product);
+
   const relatedProjects = projects
     .filter((p) => p.slug !== slug && (p.product === project.product || p.application === project.application))
     .slice(0, 3);
@@ -27,7 +30,7 @@ export default async function ProjectPage({ params }: Props) {
       {/* Hero */}
       <div className="relative h-[55vh] min-h-[420px] overflow-hidden">
         <Image
-          src={`https://picsum.photos/seed/${project.imageSeed}/1600/900`}
+          src={project.imageUrl}
           alt={project.title}
           fill
           className="object-cover"
@@ -69,13 +72,13 @@ export default async function ProjectPage({ params }: Props) {
               {project.excerpt}
             </p>
 
-            {/* Image gallery */}
+            {/* Gallery — swap /public/images/projects/[slug]/ photos in when available */}
             <h2 className="text-2xl font-bold mb-6" style={{ color: "#f5f0eb" }}>Gallery</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {[1, 2, 3, 4, 5, 6].map((n) => (
                 <div key={n} className="relative aspect-square overflow-hidden rounded">
                   <Image
-                    src={`https://picsum.photos/seed/${project.imageSeed}-g${n}/600/600`}
+                    src={project.imageUrl}
                     alt={`${project.title} - Photo ${n}`}
                     fill
                     className="object-cover hover:scale-105 transition-transform duration-300"
@@ -103,7 +106,7 @@ export default async function ProjectPage({ params }: Props) {
               </div>
 
               <Link
-                href={`/products/${project.product.toLowerCase().replace(/\s+/g, "-")}`}
+                href={productEntry ? `/products/${productEntry.slug}` : "/products"}
                 className="block w-full text-center font-semibold py-4 rounded-lg mt-8 text-sm"
                 style={{ background: "#f97316", color: "#fff" }}
               >
@@ -133,7 +136,7 @@ export default async function ProjectPage({ params }: Props) {
                 >
                   <div className="relative h-40 overflow-hidden">
                     <Image
-                      src={`https://picsum.photos/seed/${p.imageSeed}/600/400`}
+                      src={p.imageUrl}
                       alt={p.title}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"

@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import { products } from "@/lib/products";
+
+export const metadata: Metadata = {
+  title: "Products | HUB Surface Systems",
+  description: "Ten purpose-built surface treatment systems — thermoplastics, MMA resins, stamped asphalt, and protective coatings for Canadian municipalities and contractors.",
+};
 
 export default function ProductsPage() {
   return (

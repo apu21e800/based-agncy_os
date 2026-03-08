@@ -16,10 +16,9 @@ export default async function ProductPage({ params }: Props) {
   const product = products.find((p) => p.slug === slug);
   if (!product) notFound();
 
-  const gallerySeeds = [
-    `${slug}-g1`, `${slug}-g2`, `${slug}-g3`,
-    `${slug}-g4`, `${slug}-g5`, `${slug}-g6`,
-  ];
+  // Gallery images: replace product.imageUrl entries with real photos
+  // when available in /public/images/products/[slug]/
+  const galleryImages = Array(6).fill(product.imageUrl);
 
   return (
     <main style={{ background: "#1a1a1a", minHeight: "100vh" }}>
@@ -28,7 +27,7 @@ export default async function ProductPage({ params }: Props) {
       {/* Hero banner */}
       <div className="relative h-[50vh] min-h-[400px] overflow-hidden">
         <Image
-          src={`https://picsum.photos/seed/${slug}-hero/1600/900`}
+          src={product.imageUrl}
           alt={product.name}
           fill
           className="object-cover"
@@ -63,10 +62,10 @@ export default async function ProductPage({ params }: Props) {
             {/* Gallery */}
             <h2 className="text-2xl font-bold mb-6" style={{ color: "#f5f0eb" }}>Gallery</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {gallerySeeds.map((seed) => (
-                <div key={seed} className="relative aspect-square overflow-hidden rounded">
+              {galleryImages.map((src, idx) => (
+                <div key={idx} className="relative aspect-square overflow-hidden rounded">
                   <Image
-                    src={`https://picsum.photos/seed/${seed}/600/600`}
+                    src={src}
                     alt={`${product.name} installation`}
                     fill
                     className="object-cover hover:scale-105 transition-transform duration-300"

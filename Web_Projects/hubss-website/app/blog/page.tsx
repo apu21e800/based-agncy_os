@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/mdx";
+
+export const metadata: Metadata = {
+  title: "Blog | HUB Surface Systems",
+  description: "Insights on decorative pavement, Vision Zero, Complete Streets, and Canadian municipal infrastructure from the HUB Surface Systems team.",
+};
 
 export default function BlogPage() {
   const posts = getAllPosts();

@@ -10,6 +10,9 @@ import { projects } from "@/lib/projects";
 
 type FilterType = "all" | "product" | "application" | "province";
 
+const truncate = (str: string, n: number) =>
+  str.length > n ? str.slice(0, str.lastIndexOf(" ", n)) + "..." : str;
+
 export default function ProjectsPage() {
   const [filter, setFilter] = useState<{ type: FilterType; value: string }>({ type: "all", value: "" });
 
@@ -84,7 +87,7 @@ export default function ProjectsPage() {
             >
               <div className="relative h-52 overflow-hidden">
                 <Image
-                  src={`https://picsum.photos/seed/${project.imageSeed}/800/600`}
+                  src={project.imageUrl}
                   alt={project.title}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -113,7 +116,7 @@ export default function ProjectsPage() {
                   {project.city}, {project.province}
                 </p>
                 <p className="text-xs leading-relaxed mb-4" style={{ color: "#9ca3af" }}>
-                  {project.excerpt.slice(0, 100)}...
+                  {truncate(project.excerpt, 120)}
                 </p>
                 <Link
                   href={`/projects/${project.slug}`}

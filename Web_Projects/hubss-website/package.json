@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
     "@next/mdx": "^16.1.6",
     "@tailwindcss/typography": "^0.5.19",
     "framer-motion": "^12.34.5",
@@ -15,7 +16,8 @@
     "next": "16.1.6",
     "next-mdx-remote": "^6.0.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "resend": "^6.9.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

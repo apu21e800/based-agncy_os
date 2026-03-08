@@ -33,7 +33,7 @@ export default function RecentProjects() {
           </Link>
         </div>
 
-        {/* Featured project — full width */}
+        {/* Featured project */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -43,7 +43,7 @@ export default function RecentProjects() {
         >
           <div className="relative md:col-span-3 h-64 md:h-auto min-h-[320px]">
             <Image
-              src={`https://picsum.photos/seed/${featured.imageSeed}/1200/800`}
+              src={featured.imageUrl}
               alt={featured.title}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -104,7 +104,7 @@ export default function RecentProjects() {
             >
               <div className="relative h-52 overflow-hidden">
                 <Image
-                  src={`https://picsum.photos/seed/${project.imageSeed}/800/600`}
+                  src={project.imageUrl}
                   alt={project.title}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"

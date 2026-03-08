@@ -13,6 +13,8 @@ const benefits = [
 export default function LunchLearn() {
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   return (
     <section
@@ -111,7 +113,28 @@ export default function LunchLearn() {
                   Book Your Session
                 </h3>
                 <form
-                  onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    setLoading(true);
+                    setError("");
+                    try {
+                      const res = await fetch("/api/contact", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ ...form, formType: "lunch-learn", website: "" }),
+                      });
+                      const data = await res.json();
+                      if (!res.ok || data.error) {
+                        setError(data.error ?? "Something went wrong. Please try again.");
+                      } else {
+                        setSubmitted(true);
+                      }
+                    } catch {
+                      setError("Network error. Please try again.");
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
                   className="space-y-4"
                 >
                   {[
@@ -129,7 +152,7 @@ export default function LunchLearn() {
                         value={form[field.key as keyof typeof form]}
                         onChange={(e) => setForm({ ...form, [field.key]: e.target.value })}
                         placeholder={field.placeholder}
-                        className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all"
+                        className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all focus:ring-1 focus:ring-orange-500"
                         style={{
                           background: "#1a1a1a",
                           border: "1px solid #333",
@@ -138,12 +161,27 @@ export default function LunchLearn() {
                       />
                     </div>
                   ))}
+                  {/* Honeypot */}
+                  <input
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    className="hidden"
+                    aria-hidden="true"
+                  />
+
+                  {error && (
+                    <p className="text-sm text-red-400">{error}</p>
+                  )}
+
                   <button
                     type="submit"
-                    className="w-full font-semibold py-4 rounded-lg transition-colors text-sm mt-2"
+                    disabled={loading}
+                    className="w-full font-semibold py-4 rounded-lg transition-all text-sm mt-2 disabled:opacity-60"
                     style={{ background: "#f97316", color: "#fff" }}
                   >
-                    Register for Lunch &amp; Learn
+                    {loading ? "Sending..." : "Register for Lunch & Learn"}
                   </button>
                 </form>
               </>

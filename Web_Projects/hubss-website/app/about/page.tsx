@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
+
+export const metadata: Metadata = {
+  title: "About | HUB Surface Systems",
+  description: "30 years transforming Canadian streets, crosswalks, and public spaces. Two regional offices — Milton, Ontario and Ladysmith, BC — serving all 10 provinces.",
+};
 
 const differentiators = [
   { title: "Flexibility vs Concrete", desc: "Asphalt-based systems flex with Canada's freeze-thaw cycles, outlasting concrete alternatives by 2–3x in northern climates." },
@@ -84,40 +90,71 @@ export default function AboutPage() {
             {[
               {
                 region: "East Office",
+                territory: "Western Canada",
                 city: "Milton, Ontario",
                 contact: "Doug Bain",
                 email: "doug.bain@hubss.com",
                 phone: "416-540-9287",
+                provinces: ["ON", "QC", "NS", "NB", "PE", "NL", "MB"],
               },
               {
                 region: "West Office",
+                territory: "Eastern Canada",
                 city: "Ladysmith, British Columbia",
                 contact: "Cleve Stordy",
                 email: "cleve.stordy@hubss.com",
                 phone: "604-309-8212",
+                provinces: ["BC", "AB", "SK", "NT", "YT", "NU"],
               },
             ].map((office) => (
-              <div key={office.region} className="p-8 rounded-xl" style={{ background: "#2d2d2d", border: "1px solid #333" }}>
+              <div
+                key={office.region}
+                className="p-8 rounded-xl relative overflow-hidden"
+                style={{ background: "#222222", border: "1px solid #2a2a2a" }}
+              >
+                <div
+                  className="absolute top-0 left-0 right-0 h-0.5"
+                  style={{ background: "#f97316" }}
+                />
                 <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "#f97316" }}>
                   {office.region}
                 </p>
                 <h3 className="text-xl font-bold mb-1" style={{ color: "#f5f0eb" }}>{office.city}</h3>
-                <p className="text-sm mb-4" style={{ color: "#9ca3af" }}>{office.contact}</p>
-                <div
-                  className="h-32 rounded-lg mb-5 flex items-center justify-center text-xs"
-                  style={{ background: "#1a1a1a", border: "1px solid #333", color: "#9ca3af" }}
-                >
-                  [Map Placeholder]
+                <p className="text-sm mb-5" style={{ color: "#6b7280" }}>{office.contact}</p>
+
+                {/* Province tags */}
+                <div className="flex flex-wrap gap-1.5 mb-6">
+                  {office.provinces.map((prov) => (
+                    <span
+                      key={prov}
+                      className="text-xs font-bold px-2 py-0.5 rounded"
+                      style={{ background: "rgba(249,115,22,0.1)", color: "#f97316", border: "1px solid rgba(249,115,22,0.2)" }}
+                    >
+                      {prov}
+                    </span>
+                  ))}
                 </div>
-                <a href={`mailto:${office.email}`} className="text-sm block mb-1 transition-colors hover:text-[#f97316]" style={{ color: "#9ca3af" }}>
+
+                <a
+                  href={`mailto:${office.email}`}
+                  className="text-sm block mb-1.5 transition-colors hover:text-[#f97316]"
+                  style={{ color: "#9ca3af" }}
+                >
                   {office.email}
                 </a>
-                <a href={`tel:${office.phone.replace(/-/g, "")}`} className="text-sm transition-colors hover:text-[#f97316]" style={{ color: "#9ca3af" }}>
+                <a
+                  href={`tel:${office.phone.replace(/-/g, "")}`}
+                  className="text-sm transition-colors hover:text-[#f97316]"
+                  style={{ color: "#9ca3af" }}
+                >
                   {office.phone}
                 </a>
               </div>
             ))}
           </div>
+          <p className="text-center text-sm mt-8" style={{ color: "#4b5563" }}>
+            Serving all 10 provinces and 3 territories
+          </p>
         </div>
       </div>
 

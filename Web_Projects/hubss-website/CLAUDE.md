@@ -24,13 +24,19 @@ Markings, Parks & Paths, Community Branding, Town Homes, Parking Lots, Airports.
   durability, used by York Region, City of Toronto, Vancouver, UBC
 
 ## Tech Stack
-- Next.js 15 (App Router)
-- Tailwind CSS
+- Next.js 16.1.6 (App Router, Turbopack)
+- Tailwind CSS 4
 - TypeScript (strict)
 - MDX for blog posts (markdown with components)
 - Framer Motion for animations
+- Resend for transactional email (contact + lunch & learn forms)
 - Images: /public/images/ — swap by replacing files, no code change needed
 - Documents: /public/docs/ — PDFs linked by filename
+
+## Environment Variables
+Copy .env.local.example → .env.local and fill in:
+- RESEND_API_KEY — from resend.com (required for forms to send)
+- CONTACT_EMAIL — receiving address (defaults to info@hubss.com)
 
 ## Project Structure
 hubss-website/

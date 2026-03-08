@@ -1,26 +1,27 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import { projects } from "@/lib/projects";
-
-const applications = [
-  { name: "Crosswalks", slug: "crosswalks", seed: "hubss-app1", desc: "High-visibility pedestrian crossings that save lives and support Vision Zero frameworks across Canadian municipalities. HUB Surface Systems provides thermoplastic, stamped asphalt, and coloured pavement solutions for all crosswalk applications." },
-  { name: "Bus & Bike Lanes", slug: "bus-bike-lanes", seed: "hubss-app2", desc: "Dedicated transit and cycling infrastructure markings that define Complete Streets corridors. From MMAX red resin bus lanes to StreetBond bike lane coatings — durable, high-visibility, long-lasting." },
-  { name: "Driveways", slug: "driveways", seed: "hubss-app3", desc: "Decorative stamped asphalt and colour coatings for residential and commercial entrance treatments. StreetPrint and StreetBond deliver the look of premium pavers at a fraction of the cost." },
-  { name: "Public Art", slug: "public-art", seed: "hubss-app4", desc: "Street-scale murals and artistic pavement installations celebrating community identity. DecoMark custom thermoplastic brings any design to the street with precision colour and lasting vibrancy." },
-  { name: "Regulatory Markings", slug: "regulatory-markings", seed: "hubss-app5", desc: "AODA-compliant safety markings, symbols, and wayfinding systems for accessible public infrastructure. PreMark preformed symbols ensure consistent, code-compliant installations every time." },
-  { name: "Parks & Paths", slug: "parks-paths", seed: "hubss-app6", desc: "Trail markings, plaza treatments, and recreational surface coatings for parks and greenways. StreetBond and DuraShield extend the life of recreational pavement while improving aesthetics." },
-  { name: "Community Branding", slug: "community-branding", seed: "hubss-app7", desc: "Municipal identity and placemaking surfaces that give neighbourhoods a distinctive visual character. From BIA corridor treatments to gateway intersections — HUB makes streets memorable." },
-  { name: "Parking Lots", slug: "parking-lots", seed: "hubss-app8", desc: "Durable markings, stall delineation, and protective coatings for commercial and municipal parking facilities. DuraShield restoration and PreMark symbols deliver a professional finish that lasts." },
-];
+import { applications } from "@/lib/applications";
 
 export async function generateStaticParams() {
   return applications.map((a) => ({ slug: a.slug }));
 }
 
 type Props = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const app = applications.find((a) => a.slug === slug);
+  if (!app) return {};
+  return {
+    title: `${app.name} | HUB Surface Systems`,
+    description: app.desc.slice(0, 155),
+  };
+}
 
 export default async function ApplicationPage({ params }: Props) {
   const { slug } = await params;
@@ -38,7 +39,7 @@ export default async function ApplicationPage({ params }: Props) {
       {/* Hero */}
       <div className="relative h-[50vh] min-h-[400px] overflow-hidden">
         <Image
-          src={`https://picsum.photos/seed/${app.seed}/1600/900`}
+          src={app.imageUrl}
           alt={app.name}
           fill
           className="object-cover"
@@ -73,7 +74,7 @@ export default async function ApplicationPage({ params }: Props) {
                     >
                       <div className="relative w-24 h-16 flex-shrink-0 rounded overflow-hidden">
                         <Image
-                          src={`https://picsum.photos/seed/${project.imageSeed}/300/200`}
+                          src={project.imageUrl}
                           alt={project.title}
                           fill
                           className="object-cover"

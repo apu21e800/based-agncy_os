@@ -39,7 +39,7 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
 
         <div
-          className="prose max-w-none"
+          className="prose prose-invert max-w-none"
           style={{
             color: "#9ca3af",
             lineHeight: "1.8",
