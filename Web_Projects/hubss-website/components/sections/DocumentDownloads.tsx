@@ -55,7 +55,7 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
         style={{ background: "#2d2d2d", border: "1px solid #333" }}
       >
         {docs.map((doc, idx) => (
-          <DocRow key={idx} doc={doc} isLast={idx === docs.length - 1} />
+          <DocRow key={`${doc.type}-${doc.href}`} doc={doc} isLast={idx === docs.length - 1} />
         ))}
       </div>
     </div>
