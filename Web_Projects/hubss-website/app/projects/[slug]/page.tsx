@@ -68,7 +68,7 @@ export default async function ProjectPage({ params }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           <div className="lg:col-span-2">
             <h2 className="text-2xl font-bold mb-5" style={{ color: "#f5f0eb" }}>Project Overview</h2>
-            <p className="text-base leading-relaxed mb-10" style={{ color: "#9ca3af" }}>
+            <p className="text-[16px] leading-relaxed mb-10" style={{ color: "#e5e7eb" }}>
               {project.excerpt}
             </p>
 
@@ -99,7 +99,7 @@ export default async function ProjectPage({ params }: Props) {
                   { label: "Location", value: `${project.city}, ${project.province}` },
                 ].map((detail) => (
                   <div key={detail.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid #333", paddingBottom: "12px" }}>
-                    <span style={{ color: "#9ca3af" }}>{detail.label}</span>
+                    <span style={{ color: "#d1d5db" }}>{detail.label}</span>
                     <span className="font-semibold text-right" style={{ color: "#f5f0eb" }}>{detail.value}</span>
                   </div>
                 ))}
@@ -153,7 +153,7 @@ export default async function ProjectPage({ params }: Props) {
                     <h3 className="font-bold text-sm leading-snug group-hover:text-[#f97316] transition-colors" style={{ color: "#f5f0eb" }}>
                       {p.title}
                     </h3>
-                    <p className="text-xs mt-1" style={{ color: "#9ca3af" }}>{p.city}, {p.province}</p>
+                    <p className="text-xs mt-1" style={{ color: "#d1d5db" }}>{p.city}, {p.province}</p>
                   </div>
                 </Link>
               ))}

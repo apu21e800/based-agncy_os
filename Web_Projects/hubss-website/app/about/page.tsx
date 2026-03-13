@@ -32,7 +32,7 @@ export default function AboutPage() {
           <br />
           Surface Excellence
         </h1>
-        <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "#9ca3af" }}>
+        <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "#e5e7eb" }}>
           HUB Surface Systems has been transforming Canadian streets, crosswalks, and public spaces
           since 1994. What started as a single-product distributor has grown into Canada&apos;s most
           comprehensive decorative pavement solutions provider.
@@ -45,7 +45,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <div>
               <h2 className="text-3xl font-bold mb-6" style={{ color: "#f5f0eb" }}>Our Story</h2>
-              <div className="space-y-4 text-base leading-relaxed" style={{ color: "#9ca3af" }}>
+              <div className="space-y-4 text-base leading-relaxed" style={{ color: "#e5e7eb" }}>
                 <p>
                   HUB Surface Systems was founded with a simple belief: streets don&apos;t have to be grey.
                   Canadian cities had spent decades treating pavement as pure utility — functional,
@@ -71,7 +71,7 @@ export default function AboutPage() {
                 &ldquo;To transform Canadian infrastructure into vibrant, durable civic identity —
                 one surface at a time.&rdquo;
               </p>
-              <p className="text-base leading-relaxed" style={{ color: "#9ca3af" }}>
+              <p className="text-base leading-relaxed" style={{ color: "#e5e7eb" }}>
                 We believe that the quality of a community&apos;s public spaces reflects its values.
                 When streets are beautiful, accessible, and legible, people use them differently —
                 they walk more, drive slower, and feel more connected to where they live.
@@ -120,7 +120,7 @@ export default function AboutPage() {
                   {office.region}
                 </p>
                 <h3 className="text-xl font-bold mb-1" style={{ color: "#f5f0eb" }}>{office.city}</h3>
-                <p className="text-sm mb-5" style={{ color: "#6b7280" }}>{office.contact}</p>
+                <p className="text-sm mb-5" style={{ color: "#d1d5db" }}>{office.contact}</p>
 
                 {/* Province tags */}
                 <div className="flex flex-wrap gap-1.5 mb-6">
@@ -138,21 +138,21 @@ export default function AboutPage() {
                 <a
                   href={`mailto:${office.email}`}
                   className="text-sm block mb-1.5 transition-colors hover:text-[#f97316]"
-                  style={{ color: "#9ca3af" }}
+                  style={{ color: "#d1d5db" }}
                 >
                   {office.email}
                 </a>
                 <a
                   href={`tel:${office.phone.replace(/-/g, "")}`}
                   className="text-sm transition-colors hover:text-[#f97316]"
-                  style={{ color: "#9ca3af" }}
+                  style={{ color: "#d1d5db" }}
                 >
                   {office.phone}
                 </a>
               </div>
             ))}
           </div>
-          <p className="text-center text-sm mt-8" style={{ color: "#4b5563" }}>
+          <p className="text-center text-sm mt-8" style={{ color: "#d1d5db" }}>
             Serving all 10 provinces and 3 territories
           </p>
         </div>
@@ -167,7 +167,7 @@ export default function AboutPage() {
               <div key={d.title} className="p-7 rounded-xl" style={{ background: "#2d2d2d", border: "1px solid #333" }}>
                 <div className="w-8 h-0.5 mb-5" style={{ background: "#f97316" }} />
                 <h3 className="font-bold text-lg mb-3" style={{ color: "#f5f0eb" }}>{d.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#9ca3af" }}>{d.desc}</p>
+                <p className="text-[15px] leading-relaxed" style={{ color: "#e5e7eb" }}>{d.desc}</p>
               </div>
             ))}
           </div>

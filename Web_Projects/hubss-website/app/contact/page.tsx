@@ -36,7 +36,7 @@ export default function ContactPage() {
             <h1 className="text-5xl font-bold mb-8 leading-tight" style={{ color: "#f5f0eb" }}>
               Let&apos;s Build<br />Something.
             </h1>
-            <p className="text-base leading-relaxed mb-12" style={{ color: "#9ca3af" }}>
+            <p className="text-[16px] leading-relaxed mb-12" style={{ color: "#e5e7eb" }}>
               Whether you&apos;re a municipality planning a crosswalk program, a developer
               looking to enhance a property entrance, or a contractor seeking a product
               partner — we&apos;re here to help.
@@ -49,8 +49,8 @@ export default function ContactPage() {
                 <div key={office.region}>
                   <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#f97316" }}>{office.region}</p>
                   <p className="text-sm font-medium mb-2" style={{ color: "#f5f0eb" }}>{office.city}</p>
-                  <a href={`mailto:${office.email}`} className="text-sm block mb-1 transition-colors hover:text-[#f97316]" style={{ color: "#9ca3af" }}>{office.email}</a>
-                  <a href={`tel:${office.phone.replace(/-/g, "")}`} className="text-sm transition-colors hover:text-[#f97316]" style={{ color: "#9ca3af" }}>{office.phone}</a>
+                  <a href={`mailto:${office.email}`} className="text-sm block mb-1 transition-colors hover:text-[#f97316]" style={{ color: "#d1d5db" }}>{office.email}</a>
+                  <a href={`tel:${office.phone.replace(/-/g, "")}`} className="text-sm transition-colors hover:text-[#f97316]" style={{ color: "#d1d5db" }}>{office.phone}</a>
                 </div>
               ))}
             </div>
@@ -66,7 +66,7 @@ export default function ContactPage() {
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold mb-2" style={{ color: "#f5f0eb" }}>Message Sent!</h3>
-                <p className="text-sm" style={{ color: "#9ca3af" }}>We&apos;ll be in touch within one business day.</p>
+                <p className="text-sm" style={{ color: "#d1d5db" }}>We&apos;ll be in touch within one business day.</p>
               </div>
             ) : (
               <form
@@ -100,7 +100,7 @@ export default function ContactPage() {
                     { label: "Company", key: "company", type: "text", placeholder: "City of Toronto" },
                   ].map((f) => (
                     <div key={f.key}>
-                      <label className="block text-xs mb-2" style={{ color: "#9ca3af" }}>{f.label}</label>
+                      <label className="block text-sm mb-2" style={{ color: "#d1d5db" }}>{f.label}</label>
                       <input
                         type={f.type}
                         required
@@ -118,7 +118,7 @@ export default function ContactPage() {
                   { label: "Phone", key: "phone", type: "tel", placeholder: "416-555-0100" },
                 ].map((f) => (
                   <div key={f.key}>
-                    <label className="block text-xs mb-2" style={{ color: "#9ca3af" }}>{f.label}</label>
+                    <label className="block text-sm mb-2" style={{ color: "#d1d5db" }}>{f.label}</label>
                     <input
                       type={f.type}
                       required={f.key === "email"}
@@ -131,7 +131,7 @@ export default function ContactPage() {
                   </div>
                 ))}
                 <div>
-                  <label className="block text-xs mb-2" style={{ color: "#9ca3af" }}>Project Type</label>
+                  <label className="block text-sm mb-2" style={{ color: "#d1d5db" }}>Project Type</label>
                   <select
                     value={form.projectType}
                     onChange={(e) => setForm({ ...form, projectType: e.target.value })}
@@ -143,7 +143,7 @@ export default function ContactPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs mb-2" style={{ color: "#9ca3af" }}>Message</label>
+                  <label className="block text-sm mb-2" style={{ color: "#d1d5db" }}>Message</label>
                   <textarea
                     rows={4}
                     value={form.message}

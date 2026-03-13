@@ -63,13 +63,13 @@ export default function ProductsGrid() {
                   </h3>
 
                   <p
-                    className="text-xs font-medium mb-4 italic"
-                    style={{ color: "#f97316", opacity: 0.8 }}
+                    className="font-medium mb-4"
+                    style={{ color: "#fb923c", fontSize: "13px" }}
                   >
                     {product.shortDesc}
                   </p>
 
-                  <p className="text-sm leading-relaxed mb-6" style={{ color: "#6b7280" }}>
+                  <p className="text-[15px] leading-relaxed mb-6" style={{ color: "#e5e7eb" }}>
                     {product.description.slice(0, 90)}
                     {product.description.length > 90 ? "..." : ""}
                   </p>

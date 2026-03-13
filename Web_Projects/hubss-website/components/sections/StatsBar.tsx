@@ -36,7 +36,7 @@ export default function StatsBar() {
               >
                 {stat.value}
               </p>
-              <p className="text-sm font-medium" style={{ color: "#9ca3af" }}>
+              <p className="text-sm font-medium" style={{ color: "#d1d5db" }}>
                 {stat.label}
               </p>
             </motion.div>

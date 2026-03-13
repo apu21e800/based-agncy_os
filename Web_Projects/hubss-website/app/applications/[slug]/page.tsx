@@ -59,7 +59,7 @@ export default async function ApplicationPage({ params }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           <div className="lg:col-span-2">
             <h2 className="text-2xl font-bold mb-5" style={{ color: "#f5f0eb" }}>Overview</h2>
-            <p className="text-base leading-relaxed mb-12" style={{ color: "#9ca3af" }}>{app.desc}</p>
+            <p className="text-[16px] leading-relaxed mb-12" style={{ color: "#e5e7eb" }}>{app.desc}</p>
 
             {relatedProjects.length > 0 && (
               <>
@@ -85,7 +85,7 @@ export default async function ApplicationPage({ params }: Props) {
                         <h3 className="font-semibold text-sm mb-1 group-hover:text-[#f97316] transition-colors" style={{ color: "#f5f0eb" }}>
                           {project.title}
                         </h3>
-                        <p className="text-xs" style={{ color: "#9ca3af" }}>{project.city}, {project.province}</p>
+                        <p className="text-xs" style={{ color: "#d1d5db" }}>{project.city}, {project.province}</p>
                       </div>
                     </Link>
                   ))}
@@ -97,7 +97,7 @@ export default async function ApplicationPage({ params }: Props) {
           <div>
             <div className="rounded-xl p-8" style={{ background: "#2d2d2d", border: "1px solid #333" }}>
               <h3 className="font-bold text-lg mb-5" style={{ color: "#f5f0eb" }}>Get Started</h3>
-              <p className="text-sm mb-6" style={{ color: "#9ca3af" }}>
+              <p className="text-[15px] mb-6" style={{ color: "#e5e7eb" }}>
                 Interested in this application for your municipality or project? Contact us for a consultation.
               </p>
               <Link

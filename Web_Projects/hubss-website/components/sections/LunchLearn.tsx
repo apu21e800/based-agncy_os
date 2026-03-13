@@ -50,14 +50,14 @@ export default function LunchLearn() {
               <br />
               &amp; learn
             </h2>
-            <p className="text-lg leading-relaxed mb-8" style={{ color: "#9ca3af" }}>
+            <p className="text-lg leading-relaxed mb-8" style={{ color: "#e5e7eb" }}>
               Complimentary sessions for municipalities, engineering firms, and
               contractors. Discover the latest in decorative pavement technology,
               Vision Zero solutions, and Complete Streets applications.
             </p>
             <ul className="space-y-3 mb-8">
               {benefits.map((item) => (
-                <li key={item} className="flex items-center gap-3" style={{ color: "#9ca3af" }}>
+                <li key={item} className="flex items-center gap-3" style={{ color: "#d1d5db" }}>
                   <span
                     className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
                     style={{ background: "rgba(249,115,22,0.2)" }}
@@ -79,7 +79,7 @@ export default function LunchLearn() {
               >
                 SD
               </div>
-              <span className="text-xs" style={{ color: "#9ca3af" }}>
+              <span className="text-xs" style={{ color: "#d1d5db" }}>
                 Delivered by SkipTheDishes
               </span>
             </div>
@@ -103,7 +103,7 @@ export default function LunchLearn() {
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold mb-2" style={{ color: "#f5f0eb" }}>Request Received!</h3>
-                <p className="text-sm" style={{ color: "#9ca3af" }}>
+                <p className="text-sm" style={{ color: "#d1d5db" }}>
                   We&apos;ll be in touch within one business day.
                 </p>
               </div>
@@ -143,7 +143,7 @@ export default function LunchLearn() {
                     { label: "Phone Number", key: "phone", type: "tel", placeholder: "416-555-0100" },
                   ].map((field) => (
                     <div key={field.key}>
-                      <label className="block text-sm mb-2" style={{ color: "#9ca3af" }}>
+                      <label className="block text-sm mb-2" style={{ color: "#d1d5db" }}>
                         {field.label}
                       </label>
                       <input

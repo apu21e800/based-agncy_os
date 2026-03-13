@@ -73,7 +73,7 @@ export default function Hero() {
 
             <p
               className="text-lg md:text-xl max-w-xl mb-10 font-light leading-relaxed"
-              style={{ color: "#6b7280" }}
+              style={{ color: "#e5e7eb" }}
             >
               The infrastructure beneath great cities.
             </p>
@@ -119,7 +119,7 @@ export default function Hero() {
                     </span>
                     <span
                       className="text-sm ml-1.5"
-                      style={{ color: "#4b5563" }}
+                      style={{ color: "#d1d5db" }}
                     >
                       {stat.label}
                     </span>

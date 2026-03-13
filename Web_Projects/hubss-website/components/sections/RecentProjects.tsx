@@ -27,7 +27,7 @@ export default function RecentProjects() {
           <Link
             href="/projects"
             className="hidden md:block text-sm font-semibold px-6 py-3 rounded transition-colors"
-            style={{ border: "1px solid #333", color: "#9ca3af" }}
+            style={{ border: "1px solid #333", color: "#d1d5db" }}
           >
             Browse All Projects
           </Link>
@@ -71,10 +71,10 @@ export default function RecentProjects() {
             >
               {featured.title}
             </h3>
-            <p className="text-sm leading-relaxed mb-6" style={{ color: "#9ca3af" }}>
+            <p className="text-[15px] leading-relaxed mb-6" style={{ color: "#e5e7eb" }}>
               {featured.excerpt}
             </p>
-            <p className="text-xs mb-6" style={{ color: "#9ca3af" }}>
+            <p className="text-xs mb-6" style={{ color: "#d1d5db" }}>
               {featured.city}, {featured.province}
             </p>
             <Link
@@ -123,7 +123,7 @@ export default function RecentProjects() {
                 <h3 className="text-lg font-bold mb-2 leading-tight" style={{ color: "#f5f0eb" }}>
                   {project.title}
                 </h3>
-                <p className="text-xs mb-4" style={{ color: "#9ca3af" }}>
+                <p className="text-xs mb-4" style={{ color: "#d1d5db" }}>
                   {project.city}, {project.province}
                 </p>
                 <Link
@@ -145,7 +145,7 @@ export default function RecentProjects() {
           <Link
             href="/projects"
             className="text-sm font-semibold px-6 py-3 rounded"
-            style={{ border: "1px solid #333", color: "#9ca3af" }}
+            style={{ border: "1px solid #333", color: "#d1d5db" }}
           >
             Browse All Projects
           </Link>

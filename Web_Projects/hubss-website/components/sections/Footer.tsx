@@ -46,10 +46,10 @@ export default function Footer() {
               <span className="font-bold text-2xl" style={{ color: "#f5f0eb" }}>HUB</span>
               <span className="font-bold text-2xl" style={{ color: "#f97316" }}>SS</span>
             </div>
-            <p className="text-sm leading-relaxed mb-1" style={{ color: "#9ca3af" }}>
+            <p className="text-sm leading-relaxed mb-1" style={{ color: "#d1d5db" }}>
               Redefining Canadian Hardscapes Since 1994
             </p>
-            <p className="text-xs mb-6" style={{ color: "#4b5563" }}>
+            <p className="text-xs mb-6" style={{ color: "#9ca3af" }}>
               Proud to work coast to coast — all 10 provinces
             </p>
             <div className="flex gap-2">
@@ -82,7 +82,7 @@ export default function Footer() {
                   <Link
                     href={`/products/${p.slug}`}
                     className="text-sm transition-colors hover:text-[#f97316]"
-                    style={{ color: "#9ca3af" }}
+                    style={{ color: "#d1d5db" }}
                   >
                     {p.name}
                   </Link>
@@ -100,7 +100,7 @@ export default function Footer() {
                   <Link
                     href={`/applications/${a.slug}`}
                     className="text-sm transition-colors hover:text-[#f97316]"
-                    style={{ color: "#9ca3af" }}
+                    style={{ color: "#d1d5db" }}
                   >
                     {a.label}
                   </Link>
@@ -116,14 +116,14 @@ export default function Footer() {
               <div>
                 <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#f97316" }}>East Office</p>
                 <p className="text-sm mb-1" style={{ color: "#f5f0eb" }}>Milton, Ontario</p>
-                <a href="mailto:doug.bain@hubss.com" className="text-xs block transition-colors hover:text-white" style={{ color: "#9ca3af" }}>doug.bain@hubss.com</a>
-                <a href="tel:4165409287" className="text-xs block transition-colors hover:text-white" style={{ color: "#9ca3af" }}>416-540-9287</a>
+                <a href="mailto:doug.bain@hubss.com" className="text-xs block transition-colors hover:text-white" style={{ color: "#d1d5db" }}>doug.bain@hubss.com</a>
+                <a href="tel:4165409287" className="text-xs block transition-colors hover:text-white" style={{ color: "#d1d5db" }}>416-540-9287</a>
               </div>
               <div>
                 <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#f97316" }}>West Office</p>
                 <p className="text-sm mb-1" style={{ color: "#f5f0eb" }}>Ladysmith, BC</p>
-                <a href="mailto:cleve.stordy@hubss.com" className="text-xs block transition-colors hover:text-white" style={{ color: "#9ca3af" }}>cleve.stordy@hubss.com</a>
-                <a href="tel:6043098212" className="text-xs block transition-colors hover:text-white" style={{ color: "#9ca3af" }}>604-309-8212</a>
+                <a href="mailto:cleve.stordy@hubss.com" className="text-xs block transition-colors hover:text-white" style={{ color: "#d1d5db" }}>cleve.stordy@hubss.com</a>
+                <a href="tel:6043098212" className="text-xs block transition-colors hover:text-white" style={{ color: "#d1d5db" }}>604-309-8212</a>
               </div>
             </div>
           </div>
@@ -133,12 +133,12 @@ export default function Footer() {
           className="mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4"
           style={{ borderTop: "1px solid #333" }}
         >
-          <p className="text-xs" style={{ color: "#9ca3af" }}>
+          <p className="text-xs" style={{ color: "#d1d5db" }}>
             &copy; {new Date().getFullYear()} HUB Surface Systems. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-xs transition-colors hover:text-white" style={{ color: "#9ca3af" }}>Privacy Policy</Link>
-            <Link href="/terms" className="text-xs transition-colors hover:text-white" style={{ color: "#9ca3af" }}>Terms of Use</Link>
+            <Link href="/privacy" className="text-xs transition-colors hover:text-white" style={{ color: "#d1d5db" }}>Privacy Policy</Link>
+            <Link href="/terms" className="text-xs transition-colors hover:text-white" style={{ color: "#d1d5db" }}>Terms of Use</Link>
           </div>
         </div>
       </div>

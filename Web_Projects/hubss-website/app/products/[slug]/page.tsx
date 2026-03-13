@@ -44,7 +44,7 @@ export default async function ProductPage({ params }: Props) {
             <h1 className="text-6xl font-bold" style={{ color: "#f5f0eb" }}>
               {product.name}
             </h1>
-            <p className="text-lg mt-2" style={{ color: "#9ca3af" }}>
+            <p className="text-lg mt-2" style={{ color: "#e5e7eb" }}>
               {product.shortDesc}
             </p>
           </div>
@@ -56,7 +56,7 @@ export default async function ProductPage({ params }: Props) {
           {/* Left: description + gallery */}
           <div className="lg:col-span-2">
             <h2 className="text-2xl font-bold mb-5" style={{ color: "#f5f0eb" }}>About {product.name}</h2>
-            <p className="text-base leading-relaxed mb-12" style={{ color: "#9ca3af" }}>
+            <p className="text-[16px] leading-relaxed mb-12" style={{ color: "#e5e7eb" }}>
               {product.description}
             </p>
 
@@ -86,7 +86,7 @@ export default async function ProductPage({ params }: Props) {
               <div className="space-y-4">
                 {product.specs.map((spec) => (
                   <div key={spec.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid #333", paddingBottom: "12px" }}>
-                    <span style={{ color: "#9ca3af" }}>{spec.label}</span>
+                    <span style={{ color: "#d1d5db" }}>{spec.label}</span>
                     <span className="font-semibold text-right max-w-[60%]" style={{ color: "#f5f0eb" }}>
                       {spec.value}
                     </span>
@@ -121,7 +121,7 @@ export default async function ProductPage({ params }: Props) {
                 key={app}
                 href={`/applications/${app.toLowerCase().replace(/[&\s]+/g, "-")}`}
                 className="text-sm font-semibold px-5 py-2.5 rounded transition-colors"
-                style={{ background: "#2d2d2d", color: "#9ca3af", border: "1px solid #333" }}
+                style={{ background: "#2d2d2d", color: "#d1d5db", border: "1px solid #333" }}
               >
                 {app}
               </Link>
