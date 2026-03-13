@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import DocumentDownloads from "@/components/sections/DocumentDownloads";
 import { products } from "@/lib/products";
 
 export async function generateStaticParams() {
@@ -74,6 +75,8 @@ export default async function ProductPage({ params }: Props) {
                 </div>
               ))}
             </div>
+
+            <DocumentDownloads slug={product.slug} />
           </div>
 
           {/* Right: specs + CTA */}
