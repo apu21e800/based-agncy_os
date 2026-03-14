@@ -35,7 +35,6 @@ export default function Nav() {
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       style={{
         background: scrolled ? "rgba(10,10,10,0.92)" : "rgba(26,26,26,0.95)",
-        borderBottom: "1px solid #2a2a2a",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
       }}
@@ -79,7 +78,7 @@ export default function Nav() {
                     className={`absolute bottom-0 left-0 h-px transition-all duration-200 ${
                       active ? "w-full" : "w-0 group-hover:w-full"
                     }`}
-                    style={{ background: "#f97316" }}
+                    style={{ background: "linear-gradient(90deg, #f97316 0%, #eab308 100%)" }}
                   />
                 </Link>
               );
@@ -141,6 +140,12 @@ export default function Nav() {
           </div>
         )}
       </div>
+
+      {/* Gradient accent line */}
+      <div
+        className="absolute bottom-0 left-0 right-0"
+        style={{ height: "3px", background: "linear-gradient(90deg, #f97316 0%, #eab308 100%)" }}
+      />
     </nav>
   );
 }

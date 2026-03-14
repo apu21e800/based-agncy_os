@@ -14,8 +14,11 @@ export default function Home() {
       <Hero />
       <StatsBar />
       <ProductsGrid />
+      <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.35) 25%, rgba(234,179,8,0.35) 75%, transparent 100%)" }} />
       <ApplicationsGrid />
+      <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.35) 25%, rgba(234,179,8,0.35) 75%, transparent 100%)" }} />
       <RecentProjects />
+      <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.35) 25%, rgba(234,179,8,0.35) 75%, transparent 100%)" }} />
       <LunchLearn />
       <Footer />
     </main>

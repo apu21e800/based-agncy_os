@@ -12,14 +12,19 @@ const stats = [
 export default function StatsBar() {
   return (
     <section
-      className="py-12"
+      className="py-12 relative overflow-hidden"
       style={{
         background: "#1a1a1a",
         borderTop: "1px solid #f97316",
         borderBottom: "1px solid #f97316",
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Subtle gradient overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(234,179,8,0.12) 100%)" }}
+      />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, i) => (
             <motion.div

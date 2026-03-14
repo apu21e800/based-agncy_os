@@ -63,7 +63,7 @@ export default function Hero() {
                 Canvas.
                 <motion.span
                   className="absolute left-0 right-0 bottom-1"
-                  style={{ height: "5px", background: "#f97316", originX: 0 }}
+                  style={{ height: "5px", background: "linear-gradient(90deg, #f97316 0%, #eab308 100%)", originX: 0 }}
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ delay: 0.9, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}

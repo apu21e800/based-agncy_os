@@ -3,6 +3,8 @@
 
 :root {
   --font-geist-sans: '';
+  --gradient-brand: linear-gradient(90deg, #F97316 0%, #EAB308 100%);
+  --gradient-brand-subtle: linear-gradient(90deg, rgba(249,115,22,0.15) 0%, rgba(234,179,8,0.15) 100%);
 }
 
 @theme inline {
